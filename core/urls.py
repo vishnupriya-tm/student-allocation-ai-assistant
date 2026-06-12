@@ -24,5 +24,13 @@ urlpatterns = [
     path('api/', include('allocation.urls')),
     path('api/', include('allocation.dashboard_urls')),
     path('api/',include('allocation.assistant_urls')),
+    path('api/',include('ai_assistant.urls')),
     
 ]
+from django.conf import settings
+from django.conf.urls.static import static
+
+urlpatterns += static(
+    settings.MEDIA_URL,
+    document_root=settings.MEDIA_ROOT
+)
