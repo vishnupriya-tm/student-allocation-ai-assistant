@@ -6,7 +6,7 @@ from .models import (
     Course,
     SeatReservation,
     CoursePreference,
-    Allocation
+    Allocation,RejectedAllocation
 )
 
 admin.site.register(Student)
@@ -14,4 +14,4 @@ admin.site.register(Course)
 admin.site.register(SeatReservation)
 admin.site.register(CoursePreference)
 admin.site.register(Allocation)
-#admin password:Admin@123
+admin.site.register(RejectedAllocation)
