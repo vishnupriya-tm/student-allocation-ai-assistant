@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>
+
+Course Preferences
+
+</title>
+
+<link
+href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+rel="stylesheet">
+
+<style>
+
+.card{
+
+    border-radius:18px;
+
+}
+
+.btn{
+
+    transition:.25s;
+
+}
+
+.btn:hover{
+
+    transform:translateY(-2px);
+
+}
+
+</style>
+
+</head>
+
+<body style="background:#F8FAFC;">
+
+<div class="container py-5">
+
+<div class="d-flex justify-content-between align-items-center mb-5">
+
+<h1 class="text-primary fw-bold">
+
+Course Preferences
+
+</h1>
+
+<a
+href="/api/dashboard/"
+class="btn btn-dark">
+
+← Dashboard
+
+</a>
+
+</div>
+
+
+<!-- Form -->
+
+<div class="card shadow-sm border-0 mb-5">
+
+<div class="card-body">
+
+<form method="POST">
+
+{% csrf_token %}
+
+<div class="row">
+
+<div class="col-md-4">
+
+<label class="form-label">
+
+Student
+
+</label>
+
+<select
+name="student"
+class="form-select"
+required>
+
+<option value="">
+
+Select Student
+
+</option>
+
+{% for student in students %}
+
+<option
+value="{{ student.id }}">
+
+{{ student.student_id }}
+
+-
+
+{{ student.name }}
+
+</option>
+
+{% endfor %}
+
+</select>
+
+</div>
+
+
+
+<div class="col-md-4">
+
+<label class="form-label">
+
+Course
+
+</label>
+
+<select
+name="course"
+class="form-select"
+required>
+
+<option value="">
+
+Select Course
+
+</option>
+
+{% for course in courses %}
+
+<option
+value="{{ course.id }}">
+
+{{ course.course_name }}
+
+</option>
+
+{% endfor %}
+
+</select>
+
+</div>
+
+
+
+<div class="col-md-4">
+
+<label class="form-label">
+
+Priority
+
+</label>
+
+<select
+name="priority"
+class="form-select"
+required>
+
+<option value="1">
+
+Priority 1
+
+</option>
+
+<option value="2">
+
+Priority 2
+
+</option>
+
+<option value="3">
+
+Priority 3
+
+</option>
+
+</select>
+
+</div>
+
+</div>
+
+
+<div class="text-end mt-4">
+
+<button
+
+type="submit"
+
+class="btn btn-primary">
+
++ Add Preference
+
+</button>
+
+</div>
+
+</form>
+
+</div>
+
+</div>
+
+
+
+<!-- History -->
+
+<div class="card shadow-sm border-0">
+
+<div class="card-header bg-primary text-white">
+
+Preference History
+
+</div>
+
+<div class="card-body">
+
+<div class="table-responsive">
+
+<table class="table table-hover">
+
+<thead>
+
+<tr>
+
+<th>
+
+Student
+
+</th>
+
+<th>
+
+Course
+
+</th>
+
+<th>
+
+Priority
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+{% for pref in preferences %}
+
+<tr>
+
+<td>
+
+{{ pref.student.name }}
+
+</td>
+
+<td>
+
+{{ pref.course.course_name }}
+
+</td>
+
+<td>
+
+<span class="badge bg-primary">
+
+{{ pref.priority }}
+
+</span>
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</body>
+
+</html>

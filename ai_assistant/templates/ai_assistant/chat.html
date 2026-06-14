@@ -60,11 +60,11 @@
 
                             </label>
 
-                            <input
-                                type="text"
+                           <select
                                 id="table_name"
-                                value="student_data"
-                                class="form-control">
+                                class="form-select">
+
+                            </select>
 
                         </div>
 
@@ -158,10 +158,53 @@
 
 <script>
 
+window.onload = async function () {
+
+    try {
+
+        const response = await fetch(
+            "/api/datasets/"
+        );
+
+        const data = await response.json();
+
+        const select =
+            document.getElementById(
+                "table_name"
+            );
+
+        data.forEach(dataset => {
+
+            select.innerHTML += `
+                <option
+                    value="${dataset.table_name}"
+                >
+                    ${dataset.name}
+                </option>
+            `;
+
+        });
+
+    }
+
+    catch(err){
+
+        console.log(err);
+
+        alert(
+            "Could not load datasets"
+        );
+
+    }
+
+}
+
+
 document
 .getElementById("query-form")
 .addEventListener(
     "submit",
+
     async function(e){
 
         e.preventDefault();
@@ -170,135 +213,228 @@ document
         .getElementById("loading")
         .classList.remove("d-none");
 
+
         const table_name =
-            document
-            .getElementById("table_name")
-            .value;
+            document.getElementById(
+                "table_name"
+            ).value;
 
         const question =
-            document
-            .getElementById("question")
-            .value;
+            document.getElementById(
+                "question"
+            ).value;
 
-        try {
+
+        try{
 
             const response =
                 await fetch(
+
                     "/api/query-dataset/",
+
                     {
+
                         method: "POST",
 
                         headers: {
+
                             "Content-Type":
                             "application/json"
+
                         },
 
                         body: JSON.stringify({
+
                             table_name,
+
                             question
+
                         })
+
                     }
+
                 );
+
 
             const data =
                 await response.json();
+
+
+            document
+            .getElementById("loading")
+            .classList.add("d-none");
+
+
+            // SQL
 
             document
             .getElementById("sql")
             .textContent =
             data.sql || "No SQL generated";
 
-            let html = "";
 
-            if (
-                data.results &&
-                data.results.length > 0
-            ){
+            // Results
 
-                html += `
-                    <div class="table-responsive">
-                    <table class="table table-bordered table-striped">
-                    <thead>
-                    <tr>
-                `;
-
-                Object.keys(
-                    data.results[0]
-                ).forEach(
-                    key => {
-                        html += `
-                            <th>${key}</th>
-                        `;
-                    }
+            const resultsDiv =
+                document.getElementById(
+                    "results"
                 );
 
-                html += `
-                    </tr>
-                    </thead>
-                    <tbody>
-                `;
 
-                data.results.forEach(
-                    row => {
+            if(data.error){
 
-                        html += "<tr>";
+                resultsDiv.innerHTML =
 
-                        Object.values(
-                            row
-                        ).forEach(
-                            value => {
+                `<div class="alert alert-danger">
 
-                                html += `
-                                    <td>${value}</td>
-                                `;
-                            }
-                        );
+                    ${data.error}
 
-                        html += "</tr>";
-                    }
-                );
+                </div>`;
 
-                html += `
-                    </tbody>
-                    </table>
-                    </div>
-                `;
+                return;
 
-            } else {
-
-                html =
-                    `
-                    <div class="alert alert-warning">
-                        No results found
-                    </div>
-                    `;
             }
 
-            document
-            .getElementById("results")
-            .innerHTML =
-            html;
 
-        } catch(error){
+            if(
 
-            document
-            .getElementById("results")
-            .innerHTML =
-            `
-            <div class="alert alert-danger">
-                ${error}
-            </div>
-            `;
+                !data.results ||
+
+                data.results.length===0
+
+            ){
+
+                resultsDiv.innerHTML =
+
+                `<div class="alert alert-warning">
+
+                    No results found
+
+                </div>`;
+
+                return;
+
+            }
+
+
+            // Create table
+
+            let html =
+
+                `<table class="table table-bordered table-striped">
+
+                    <thead>
+
+                        <tr>`;
+
+
+            Object.keys(
+
+                data.results[0]
+
+            ).forEach(
+
+                key => {
+
+                    html +=
+
+                    `<th>
+
+                        ${key}
+
+                    </th>`;
+
+                }
+
+            );
+
+
+            html +=
+
+                `</tr>
+
+                </thead>
+
+                <tbody>`;
+
+
+            data.results.forEach(
+
+                row => {
+
+                    html +=
+
+                    `<tr>`;
+
+
+                    Object.values(row)
+
+                    .forEach(
+
+                        value => {
+
+                            html +=
+
+                            `<td>
+
+                                ${value}
+
+                            </td>`;
+
+                        }
+
+                    );
+
+
+                    html +=
+
+                    `</tr>`;
+
+                }
+
+            );
+
+
+            html +=
+
+                `</tbody>
+
+                </table>`;
+
+
+            resultsDiv.innerHTML =
+
+                html;
+
+
         }
 
-        document
-        .getElementById("loading")
-        .classList.add("d-none");
+        catch(err){
+
+            console.log(err);
+
+            document
+            .getElementById("loading")
+            .classList.add("d-none");
+
+
+            document
+            .getElementById("results")
+            .innerHTML =
+
+            `<div class="alert alert-danger">
+
+                Something went wrong.
+
+            </div>`;
+
+        }
+
     }
+
 );
 
 </script>
-
 </body>
 
 </html>

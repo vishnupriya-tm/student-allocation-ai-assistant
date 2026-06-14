@@ -129,3 +129,14 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 GEMINI_API_KEY= config("GEMINI_API_KEY")
+REST_FRAMEWORK = {
+
+    "DEFAULT_AUTHENTICATION_CLASSES": [],
+
+    "DEFAULT_PERMISSION_CLASSES": [
+
+        "rest_framework.permissions.AllowAny",
+
+    ]
+
+}

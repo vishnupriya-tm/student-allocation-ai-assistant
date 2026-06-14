@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Student Allocation Dashboard</title>
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet">
+
+</head>
+<style>
+
+.btn {
+
+    transition: all 0.25s ease;
+
+}
+
+.btn:hover {
+
+    transform: translateY(-3px);
+
+    box-shadow: 0 10px 25px rgba(0,0,0,.12);
+
+}
+
+.card {
+
+    transition: all 0.25s ease;
+
+}
+
+.card:hover {
+
+    transform: translateY(-3px);
+
+    box-shadow: 0 15px 35px rgba(0,0,0,.08);
+
+}
+
+
+#run-allocation:hover{
+
+    background:#1D4ED8 !important;
+
+}
+
+
+a[href="/api/chat/"]:hover{
+
+    background:#1E293B !important;
+
+    color:white !important;
+
+}
+
+
+table tbody tr{
+
+    transition: all .2s ease;
+
+}
+
+
+table tbody tr:hover{
+
+    background:#EFF6FF;
+
+}
+
+</style>
+
+<body style="background:#F8FAFC;">
+
+<div class="container py-5">
+
+    <!-- Header -->
+
+    <div class="text-center mb-5">
+
+        <h1 class="display-4 fw-bold text-primary">
+
+            Student Allocation Dashboard
+
+        </h1>
+
+        <p class="text-muted">
+
+            Manage students, courses and seat allocation
+
+        </p>
+
+        <a href="/api/chat/"
+        class="btn btn-dark btn-lg px-5 mt-3"
+        style="border-radius:14px;">
+
+            🤖 Open AI SQL Assistant
+
+        </a>
+
+    </div>
+
+
+
+    <!-- Stats -->
+
+    <div class="row mb-5">
+
+        <div class="col-md-4">
+
+            <div class="card shadow-sm border-0"
+            style="border-radius:18px;">
+
+                <div class="card-body">
+
+                    <h6 class="text-muted">
+
+                        Students
+
+                    </h6>
+
+                    <h1>
+
+                        {{ student_count }}
+
+                    </h1>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-4">
+
+            <div class="card shadow-sm border-0"
+            style="border-radius:18px;">
+
+                <div class="card-body">
+
+                    <h6 class="text-muted">
+
+                        Courses
+
+                    </h6>
+
+                    <h1>
+
+                        {{ course_count }}
+
+                    </h1>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-4">
+
+            <div class="card shadow-sm border-0"
+            style="border-radius:18px;">
+
+                <div class="card-body">
+
+                    <h6 class="text-muted">
+
+                        Allocations
+
+                    </h6>
+
+                    <h1>
+
+                        {{ allocation_count }}
+
+                    </h1>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+
+    <!-- Management -->
+
+    <h3 class="mb-3">
+
+        Management
+
+    </h3>
+
+    <div class="row mb-5">
+
+        <div class="col-md-3">
+
+            <a href="/api/students-page/"
+            class="btn btn-outline-primary w-100">
+
+                Students
+
+            </a>
+
+        </div>
+
+        <div class="col-md-3">
+
+            <a href="/api/courses-page/"
+            class="btn btn-outline-primary w-100">
+
+                Courses
+
+            </a>
+
+        </div>
+
+        <div class="col-md-3">
+
+            <a href="/api/preferences-page/"
+            class="btn btn-outline-primary w-100">
+
+                Preferences
+
+            </a>
+
+        </div>
+
+        <div class="col-md-3">
+
+            <a href="/api/reservations-page/"
+            class="btn btn-outline-primary w-100">
+
+                Reservations
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+
+
+    <!-- Course Stats -->
+
+    <h3 class="mb-4">
+
+        📈 Course Statistics
+
+    </h3>
+
+    <div class="row mb-5">
+
+        {% for course in course_stats %}
+
+        <div class="col-md-4 mb-3">
+
+            <div class="card shadow-sm border-0"
+            style="border-radius:18px;">
+
+                <div class="card-body">
+
+                    <h4>
+
+                        {{ course.course_name }}
+
+                    </h4>
+
+                    <hr>
+
+                    <p>
+
+                        Total Seats :
+
+                        <strong>
+
+                            {{ course.total }}
+
+                        </strong>
+
+                    </p>
+
+                    <p>
+
+                        Allocated :
+
+                        <span class="badge bg-success">
+
+                            {{ course.allocated }}
+
+                        </span>
+
+                    </p>
+
+                    <p>
+
+                        Available :
+
+                        <span class="badge bg-primary">
+
+                            {{ course.available }}
+
+                        </span>
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+
+
+
+    <!-- Category Summary -->
+
+    <h3 class="mb-4">
+
+        Category Summary
+
+    </h3>
+
+    <div class="card shadow-sm border-0 mb-5"
+    style="border-radius:18px;">
+
+        <div class="card-body">
+
+            <table class="table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+
+                            Category
+
+                        </th>
+
+                        <th>
+
+                            Allocated
+
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                {% for row in category_summary %}
+
+                    <tr>
+
+                        <td>
+
+                            {{ row.student__category }}
+
+                        </td>
+
+                        <td>
+
+                            {{ row.count }}
+
+                        </td>
+
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+
+
+    <!-- Run Allocation -->
+
+    <div class="text-center mb-5">
+
+        <button
+
+        id="run-allocation"
+
+        class="btn btn-primary btn-lg px-5">
+
+            Run Allocation
+
+        </button>
+
+    </div>
+
+
+
+
+    <!-- Recent Allocations -->
+
+    <div class="card shadow-sm border-0"
+    style="border-radius:18px;">
+
+        <div class="card-header bg-success text-white">
+
+            Recent Allocations
+
+        </div>
+
+        <div class="card-body">
+
+            <table class="table table-striped">
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+
+                            Student
+
+                        </th>
+
+                        <th>
+
+                            Course
+
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                {% for allocation in allocations %}
+
+                    <tr>
+
+                        <td>
+
+                            {{ allocation.student.name }}
+
+                        </td>
+
+                        <td>
+
+                            {{ allocation.course.course_name }}
+
+                        </td>
+
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+document.getElementById(
+"run-allocation"
+).addEventListener(
+"click",
+
+async function(){
+
+    const response =
+
+    await fetch(
+
+        "/api/allocate/",
+
+        {
+
+            method:"POST"
+
+        }
+
+    );
+
+    const data =
+    await response.json();
+
+    alert(data.message);
+
+    location.reload();
+
+});
+
+</script>
+
+</body>
+</html>

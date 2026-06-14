@@ -12,6 +12,10 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import AllowAny
+from django.db import connection
+
+from rest_framework import status
+
 
 
 class CsrfExemptSessionAuthentication(SessionAuthentication):
@@ -33,75 +37,124 @@ class DatasetUploadView(generics.CreateAPIView):
 
 @method_decorator(csrf_exempt, name='dispatch')
 class DatasetQueryView(APIView):
-    authentication_classes = [CsrfExemptSessionAuthentication]
+
     permission_classes = [AllowAny]
 
     def post(self, request):
 
-        table_name = request.data.get("table_name")
-        question = request.data.get("question")
+        try:
 
-        if not table_name or not question:
-            return Response(
-                {"error": "table_name and question are required"},
-                status=400
+            table_name = request.data.get("table_name")
+
+            question = request.data.get("question")
+
+            if not table_name or not question:
+
+                return Response(
+                    {
+                        "error": "table_name and question are required"
+                    },
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+            dataset = Dataset.objects.filter(
+                table_name=table_name
+            ).first()
+
+            if not dataset:
+
+                return Response(
+                    {
+                        "error": "Dataset not found"
+                    },
+                    status=status.HTTP_404_NOT_FOUND
+                )
+
+            # Fetch columns from PostgreSQL
+
+            with connection.cursor() as cursor:
+
+                cursor.execute(
+                    """
+                    SELECT column_name
+                    FROM information_schema.columns
+                    WHERE table_name = %s
+                    ORDER BY ordinal_position
+                    """,
+                    [table_name]
+                )
+
+                columns = [
+
+                    row[0]
+
+                    for row in cursor.fetchall()
+
+                    if row[0] != "id"
+
+                ]
+
+            # Gemini generates SQL
+
+            sql = generate_sql(
+                table_name,
+                columns,
+                question
             )
 
-        dataset = Dataset.objects.filter(
-            table_name=table_name
-        ).first()
+            # Validate SQL
 
-        if not dataset:
-            return Response(
-                {"error": "Dataset not found"},
-                status=404
-            )
+            if not validate_sql(sql):
 
-        from django.db import connection
+                return Response(
+                    {
+                        "error": "Unsafe SQL generated",
 
-        with connection.cursor() as cursor:
+                        "sql": sql
+                    },
+                    status=status.HTTP_400_BAD_REQUEST
+                )
 
-            cursor.execute(
-                """
-                SELECT column_name
-                FROM information_schema.columns
-                WHERE table_name = %s
-                ORDER BY ordinal_position
-                """,
-                [table_name]
-            )
+            # Execute SQL
 
-            columns = [
-                row[0]
-                for row in cursor.fetchall()
-                if row[0] != "id"
-            ]
-
-        sql = generate_sql(
-            table_name,
-            columns,
-            question
-        )
-
-        if not validate_sql(sql):
+            results = execute_sql(sql)
 
             return Response(
                 {
-                    "error": "Unsafe SQL generated",
-                    "sql": sql
-                },
-                status=400
+
+                    "question": question,
+
+                    "sql": sql,
+
+                    "results": results
+
+                }
             )
 
-        results = execute_sql(sql)
+        except Exception as e:
 
-        return Response(
-            {
-                "question": question,
-                "sql": sql,
-                "results": results
-            }
+            return Response(
+                {
+                    "error": str(e)
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+# views.py
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
+
+class DatasetListView(APIView):
+
+    def get(self, request):
+
+        datasets = Dataset.objects.values(
+            "name",
+            "table_name"
         )
+
+        return Response(datasets)
     
 from django.shortcuts import render
 

@@ -13,7 +13,19 @@ def create_table_and_insert_data(dataset):
     columns = []
 
     for col in df.columns:
-        columns.append(f'"{col}" TEXT')
+
+        if pd.api.types.is_integer_dtype(df[col]):
+            dtype = "INTEGER"
+
+        elif pd.api.types.is_float_dtype(df[col]):
+            dtype = "FLOAT"
+
+        else:
+            dtype = "TEXT"
+
+        columns.append(
+            f'"{col}" {dtype}'
+        )
 
     create_table_sql = f'''
         CREATE TABLE IF NOT EXISTS "{table_name}" (
@@ -28,7 +40,7 @@ def create_table_and_insert_data(dataset):
 
         for _, row in df.iterrows():
 
-            values = [str(v) for v in row.tolist()]
+            values = row.tolist()
 
             placeholders = ",".join(["%s"] * len(values))
 

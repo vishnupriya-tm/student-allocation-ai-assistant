@@ -11,20 +11,66 @@ from .models import (
 
 
 def get_available_seats(course, category):
-    reservation = SeatReservation.objects.filter(
-        course=course,
-        category=category
-    ).first()
 
-    if not reservation:
-        return 0
+    # Total course capacity check
 
-    allocated_count = Allocation.objects.filter(
-        course=course,
-        student__category=category
+    total_allocated = Allocation.objects.filter(
+
+        course=course
+
     ).count()
 
-    return reservation.reserved_seats - allocated_count
+    total_remaining = (
+
+        course.total_seats
+
+        - total_allocated
+
+    )
+
+    if total_remaining <= 0:
+
+        return 0
+
+
+    reservation = SeatReservation.objects.filter(
+
+        course=course,
+
+        category=category
+
+    ).first()
+
+
+    if reservation:
+
+        category_allocated = Allocation.objects.filter(
+
+            course=course,
+
+            student__category=category
+
+        ).count()
+
+
+        reserved_remaining = (
+
+            reservation.reserved_seats
+
+            - category_allocated
+
+        )
+
+        return min(
+
+            total_remaining,
+
+            reserved_remaining
+
+        )
+
+
+    return total_remaining
 
 
 @transaction.atomic
@@ -42,8 +88,7 @@ def run_allocation():
 
         allocated = False
 
-        preferences = student.preferences.all()
-
+        preferences = student.preferences.all().order_by("priority")
         for preference in preferences:
 
             course = preference.course
