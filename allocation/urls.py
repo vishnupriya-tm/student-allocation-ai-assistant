@@ -43,34 +43,34 @@ urlpatterns = [
         name="allocation-list"
     ),
     path(
-    "allocate/",
-    AllocationProcessView.as_view(),
-    name="allocate"
+        "allocate/",
+        AllocationProcessView.as_view(),
+        name="allocate"
     ),
     path(
-    "dashboard/",
-    allocation_dashboard,
-    name="allocation-dashboard"
+        "dashboard/",
+        allocation_dashboard,
+        name="allocation-dashboard"
     ),
     path(
-    "students-page/",
-    students_page,
-    name="students-page"
+        "students-page/",
+        students_page,
+        name="students-page"
     ),
     path(
-    "courses-page/",
-    courses_page,
-    name="courses-page"
+        "courses-page/",
+        courses_page,
+        name="courses-page"
     ),
     path(
-
-    "allocations-page/",
-    allocations_page,
-    name="allocations-page"),
+        "allocations-page/",
+        allocations_page,
+        name="allocations-page"
+    ),
     path(
-    "preferences-page/",
-    preferences_page,
-    name="preferences-page"
+        "preferences-page/",
+        preferences_page,
+        name="preferences-page"
     ),
 
     path(

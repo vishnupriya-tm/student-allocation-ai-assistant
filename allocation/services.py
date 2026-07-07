@@ -70,7 +70,7 @@ def get_available_seats(course, category):
         )
 
 
-    return total_remaining
+    return 0
 
 
 @transaction.atomic
