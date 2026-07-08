@@ -165,3 +165,5 @@ def chat_page(request):
         request,
         "ai_assistant/chat.html"
     )
+def upload_page(request):
+    return render(request, "ai_assistant/upload_dataset.html")

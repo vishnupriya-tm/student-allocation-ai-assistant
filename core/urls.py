@@ -17,9 +17,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from allocation.home_views import api_home
+from django.shortcuts import redirect
 
 urlpatterns = [
-    path('', api_home),
+    path('', lambda request: redirect('/api/dashboard/'), name='home'),
     path('admin/', admin.site.urls),
     path('api/', include('allocation.urls')),
     path('api/', include('allocation.dashboard_urls')),
