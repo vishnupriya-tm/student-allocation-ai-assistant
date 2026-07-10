@@ -252,55 +252,87 @@ def allocations_page(request):
         }
 
     )
+
+
+from django.contrib import messages
+
 def preferences_page(request):
 
     if request.method == "POST":
+        student = request.POST.get("student")
+        course = request.POST.get("course")
+        priority = request.POST.get("priority")
 
-        CoursePreference.objects.create(
+        # Get existing record with same priority
+        existing_priority = CoursePreference.objects.filter(
+            student_id=student,
+            priority=priority
+        ).first()
 
-            student_id=request.POST.get("student"),
+        # Get existing record with same course
+        existing_course = CoursePreference.objects.filter(
+            student_id=student,
+            course_id=course
+        ).first()
 
-            course_id=request.POST.get("course"),
+        # Case 1: Exact same record
+        if existing_course and existing_course.priority == int(priority):
 
-            priority=request.POST.get("priority")
-
-        )
-
-        return redirect("/api/preferences-page/")
-
-
-    return render(
-
-        request,
-
-        "allocation/preferences.html",
-
-        {
-
-            "students": Student.objects.all(),
-
-            "courses": Course.objects.all(),
-
-            "preferences":
-
-            CoursePreference.objects.select_related(
-
-                "student",
-
-                "course"
-
-            ).order_by(
-
-                "student",
-
-                "priority"
-
+            messages.info(
+                request,
+                "This preference already exists."
             )
 
+        # Case 2: Same course already exists with another priority
+        elif existing_course:
+
+            messages.error(
+                request,
+                "This course is already selected by the student."
+            )
+
+        # Case 3: Same priority exists -> Update (acts like edit)
+        elif existing_priority:
+
+            existing_priority.course_id = course
+            existing_priority.save()
+
+            messages.success(
+                request,
+                "Preference updated successfully."
+            )
+
+        # Case 4: New preference
+        else:
+
+            CoursePreference.objects.create(
+                student_id=student,
+                course_id=course,
+                priority=priority
+            )
+
+            messages.success(
+                request,
+                "Preference added successfully."
+            )
+
+        return redirect("/api/preferences-page/")
+    return render(
+        request,
+        "allocation/preferences.html",
+        {
+            "students": Student.objects.all(),
+            "courses": Course.objects.all(),
+            "preferences": CoursePreference.objects.select_related(
+                "student",
+                "course"
+            ).order_by(
+                "student",
+                "priority"
+            )
         }
-
     )
-
+   
 def reservations_page(request):
 
     if request.method == "POST":

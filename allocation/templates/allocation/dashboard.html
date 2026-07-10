@@ -10,13 +10,81 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
           rel="stylesheet">
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+        rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    
     <style>
+        
 
         body{
-            background:#F8FAFC;
-            color:#0F172A;
-            font-family:Inter,Segoe UI,sans-serif;
+
+    background:#F6F8FC;
+
+    font-family:"Segoe UI",sans-serif;
+
+        }
+
+        .navbar{
+
+            height:72px;
+
+        }
+
+        .navbar-brand{
+
+            font-size:1.35rem;
+
+        }
+
+        .nav-link{
+
+            font-weight:500;
+
+            margin:0 8px;
+
+            color:#475569!important;
+
+        }
+
+        .nav-link:hover{
+
+            color:#2563EB!important;
+
+        }
+
+        .nav-link.active{
+
+            color:#2563EB!important;
+
+        }
+
+        .dropdown-menu{
+
+            border-radius:14px;
+
+        }
+
+        .dropdown-item{
+
+            padding:12px 18px;
+
+            font-weight:500;
+
+        }
+
+        .dropdown-item:hover{
+
+            background:#EFF6FF;
+
+            color:#2563EB;
+
+        }
+        .dashboard-wrapper{
+
+            max-width:1500px;
+
         }
 
         .dashboard-header{
@@ -31,6 +99,17 @@
         .dashboard-header p{
             color:#64748B;
             margin:0;
+        }
+        .dashboard-card{
+
+            height:100%;
+
+            border:none;
+
+            border-radius:18px;
+
+            box-shadow:0 8px 24px rgba(15,23,42,.06);
+
         }
 
         .card{
@@ -57,10 +136,13 @@
         }
 
         .section-title{
-            font-size:1.6rem;
+            font-size:1.25rem;
+
             font-weight:600;
-            margin-bottom:20px;
-            color:#0F172A;
+
+            color:#111827;
+
+            margin-bottom:1.5rem;
         }
 
         .btn{
@@ -157,6 +239,207 @@
             color:#0F172A;
 
         }
+        .dashboard-card{
+
+            border:none;
+
+            border-radius:18px;
+
+            box-shadow:0 8px 30px rgba(15,23,42,.05);
+
+            transition:.25s;
+
+        }
+
+        .dashboard-card:hover{
+
+            transform:translateY(-4px);
+
+            box-shadow:0 12px 35px rgba(15,23,42,.10);
+
+        }
+
+        .icon-box{
+
+            width:58px;
+
+            height:58px;
+
+            border-radius:16px;
+
+            display:flex;
+
+            justify-content:center;
+
+            align-items:center;
+
+            font-size:24px;
+
+        }
+
+        .icon-box i{
+
+            color:#2563EB;
+
+        }
+        .management-icon{
+
+            width:64px;
+
+            height:64px;
+
+            margin:auto;
+
+            border-radius:16px;
+
+            display:flex;
+
+            align-items:center;
+
+            justify-content:center;
+
+            font-size:28px;
+
+        }
+
+        .management-icon i{
+
+            color:#2563EB;
+
+        }
+
+        .dashboard-card{
+
+            cursor:pointer;
+
+        }
+
+        .dashboard-card:hover{
+
+            transform:translateY(-6px);
+
+            box-shadow:0 16px 40px rgba(15,23,42,.10);
+
+        }
+        .course-stat{
+
+            display:flex;
+
+            justify-content:space-between;
+
+            align-items:center;
+
+            padding:12px 0;
+
+            border-bottom:1px solid #F1F5F9;
+
+        }
+
+        .course-stat:last-child{
+
+            border-bottom:none;
+
+        }
+
+        .progress{
+
+            height:8px;
+
+            border-radius:20px;
+
+            background:#E2E8F0;
+
+        }
+
+        .progress-bar{
+
+            border-radius:20px;
+
+        }
+
+        .badge{
+
+            padding:8px 12px;
+
+            font-size:.8rem;
+
+            font-weight:600;
+
+        }
+        .table-light{
+
+            background:#F8FAFC;
+
+        }
+
+        .table thead th{
+
+            color:#64748B;
+
+            font-weight:600;
+
+            border-bottom:1px solid #E2E8F0;
+
+        }
+
+        .table tbody td{
+
+            padding:16px 12px;
+
+            vertical-align:middle;
+
+        }
+
+        .table tbody tr{
+
+            transition:.2s;
+
+        }
+
+        .table tbody tr:hover{
+
+            background:#F8FAFC;
+
+        }
+
+        #run-allocation{
+
+            border-radius:12px;
+
+            font-weight:600;
+
+            min-width:240px;
+
+        }
+
+        #run-allocation:hover{
+
+            background:#1D4ED8;
+
+            transform:translateY(-2px);
+
+        }
+
+        .badge{
+
+            font-weight:600;
+
+        }
+        .toast{
+
+            border-radius:14px;
+
+            min-width:340px;
+
+            box-shadow:0 12px 30px rgba(15,23,42,.15);
+
+        }
+
+        .toast-body{
+
+            font-weight:500;
+
+        }
 
 @keyframes dropdown{
 
@@ -179,250 +462,563 @@
     </style>
 
 </head>
+<div class="toast-container position-fixed top-0 end-0 p-4">
+
+    <div id="allocationToast"
+         class="toast align-items-center border-0 text-bg-success"
+         role="alert"
+         aria-live="assertive"
+         aria-atomic="true">
+
+        <div class="d-flex">
+
+            <div class="toast-body">
+
+                <i class="bi bi-check-circle-fill me-2"></i>
+
+                Allocation completed successfully.
+
+            </div>
+
+            <button type="button"
+                    class="btn-close btn-close-white me-2 m-auto"
+                    data-bs-dismiss="toast">
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
 
 <body>
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top border-bottom">
 
-<div class="container-xl py-5">
+    <div class="container">
 
+        <a class="navbar-brand fw-bold d-flex align-items-center" href="/api/dashboard/">
+
+            <i class="bi bi-mortarboard-fill text-primary me-2"></i>
+
+            Student Allocation
+
+        </a>
+
+        <button class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarNav">
+
+            <span class="navbar-toggler-icon"></span>
+
+        </button>
+
+        <div class="collapse navbar-collapse"
+             id="navbarNav">
+
+            <ul class="navbar-nav mx-auto">
+
+                <li class="nav-item">
+
+                    <a class="nav-link active"
+                       href="/api/dashboard/">
+
+                        <i class="bi bi-speedometer2 me-1"></i>
+
+                        Dashboard
+
+                    </a>
+
+                </li>
+
+                <li class="nav-item">
+
+                    <a class="nav-link"
+                       href="/api/students-page/">
+
+                        <i class="bi bi-people me-1"></i>
+
+                        Students
+
+                    </a>
+
+                </li>
+
+                <li class="nav-item">
+
+                    <a class="nav-link"
+                       href="/api/courses-page/">
+
+                        <i class="bi bi-book me-1"></i>
+
+                        Courses
+
+                    </a>
+
+                </li>
+
+                <li class="nav-item">
+
+                    <a class="nav-link"
+                       href="/api/preferences-page/">
+
+                        <i class="bi bi-list-check me-1"></i>
+
+                        Preferences
+
+                    </a>
+
+                </li>
+
+                <li class="nav-item">
+
+                    <a class="nav-link"
+                       href="/api/reservations-page/">
+
+                        <i class="bi bi-award me-1"></i>
+
+                        Reservations
+
+                    </a>
+
+                </li>
+
+            </ul>
+
+            <div class="dropdown">
+
+                <button
+                    class="btn btn-primary dropdown-toggle px-4"
+                    data-bs-toggle="dropdown">
+
+                    <i class="bi bi-stars me-2"></i>
+
+                    AI Workspace
+
+                </button>
+
+                <ul class="dropdown-menu dropdown-menu-end shadow border-0">
+
+                    <li>
+
+                        <a class="dropdown-item py-2"
+                           href="/api/upload-page/">
+
+                            <i class="bi bi-upload me-2"></i>
+
+                            Upload Dataset
+
+                        </a>
+
+                    </li>
+
+                    <li>
+
+                        <a class="dropdown-item py-2"
+                           href="/api/chat/">
+
+                            <i class="bi bi-robot me-2"></i>
+
+                            AI SQL Assistant
+
+                        </a>
+
+                    </li>
+
+                </ul>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</nav>
+
+
+
+<div class="dashboard-wrapper mx-auto">
     <!-- HEADER -->
 
-    <div class="dashboard-header d-flex justify-content-between align-items-center">
+    <div class="d-flex justify-content-between align-items-center mb-5">
 
         <div>
 
-            <h2>Student Allocation Dashboard</h2>
+            <h2 class="fw-bold mb-2 mt-md-5"
+                style="color:#111827;">
 
-            <p>
+                Student Allocation Dashboard
+
+            </h2>
+
+            <p class="text-secondary mb-0">
+
                 Manage students, courses, seat allocation and AI-powered dataset analysis.
+
             </p>
 
         </div>
 
-       <div class="dropdown">
+    </div>
 
-    <button
-        class="btn ai-btn dropdown-toggle"
-        type="button"
-        data-bs-toggle="dropdown"
-        aria-expanded="false">
+<!-- STATS -->
 
-        AI Workspace
+<div class="row g-4 mb-5">
 
-    </button>
+    <!-- Total Students -->
 
-    <ul class="dropdown-menu dropdown-menu-end ai-dropdown">
+    <div class="col-lg-4 col-md-4">
 
-        <li>
-            <a class="dropdown-item" href="/api/upload-page/">
-                Upload Dataset
-            </a>
-        </li>
+        <div class="card dashboard-card h-100">
 
-        <li>
-            <a class="dropdown-item" href="/api/chat/">
-                AI SQL Assistant
-            </a>
-        </li>
+            <div class="card-body">
 
-    </ul>
+                <div class="d-flex justify-content-between align-items-start">
+
+                    <div>
+
+                        <small class="text-muted text-uppercase">
+                            Total Students
+                        </small>
+
+                        <h2 class="fw-bold mt-2 mb-1">
+                            {{ student_count }}
+                        </h2>
+
+                        <small class="text-success">
+                            Registered Students
+                        </small>
+
+                    </div>
+
+                    <div class="icon-box bg-primary-subtle">
+
+                        <i class="bi bi-people-fill"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Active Courses -->
+
+    <div class="col-lg-4 col-md-4">
+
+        <div class="card dashboard-card h-100">
+
+            <div class="card-body">
+
+                <div class="d-flex justify-content-between align-items-start">
+
+                    <div>
+
+                        <small class="text-muted text-uppercase">
+                            Active Courses
+                        </small>
+
+                        <h2 class="fw-bold mt-2 mb-1">
+                            {{ course_count }}
+                        </h2>
+
+                        <small class="text-primary">
+                            Available Courses
+                        </small>
+
+                    </div>
+
+                    <div class="icon-box bg-success-subtle">
+
+                        <i class="bi bi-book-fill"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Total Allocations -->
+
+    <div class="col-lg-4 col-md-4">
+
+        <div class="card dashboard-card h-100">
+
+            <div class="card-body">
+
+                <div class="d-flex justify-content-between align-items-start">
+
+                    <div>
+
+                        <small class="text-muted text-uppercase">
+                            Total Allocations
+                        </small>
+
+                        <h2 class="fw-bold mt-2 mb-1">
+                            {{ allocation_count }}
+                        </h2>
+
+                        <small class="text-warning">
+                            Seat Allocations
+                        </small>
+
+                    </div>
+
+                    <div class="icon-box bg-warning-subtle">
+
+                        <i class="bi bi-check-circle-fill"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
 
 </div>
 
-    </div>
+   <!-- MANAGEMENT -->
 
+<h3 class="section-title">
 
-    <!-- STATS -->
+    Management
 
-    <div class="row g-4 mb-5">
+</h3>
 
-        <div class="col-md-4">
+<div class="row g-4 mb-5">
 
-            <div class="card">
+    <!-- Students -->
 
-                <div class="card-body">
+    <div class="col-lg-3 col-md-6">
 
-                    <div class="stat-title">
+        <a href="/api/students-page/" class="text-decoration-none">
 
-                        Total Students
+            <div class="card dashboard-card text-center h-100">
+
+                <div class="card-body py-4">
+
+                    <div class="management-icon bg-primary-subtle">
+
+                        <i class="bi bi-people-fill"></i>
 
                     </div>
 
-                    <div class="stat-value">
+                    <h5 class="mt-3 mb-2 fw-semibold">
 
-                        {{ student_count }}
+                        Students
 
-                    </div>
+                    </h5>
+
+                    <p class="text-muted small mb-0">
+
+                        Manage student records
+
+                    </p>
 
                 </div>
 
             </div>
 
-        </div>
+        </a>
 
-        <div class="col-md-4">
+    </div>
 
-            <div class="card">
+    <!-- Courses -->
 
-                <div class="card-body">
+    <div class="col-lg-3 col-md-6">
 
-                    <div class="stat-title">
+        <a href="/api/courses-page/" class="text-decoration-none">
 
-                        Active Courses
+            <div class="card dashboard-card text-center h-100">
+
+                <div class="card-body py-4">
+
+                    <div class="management-icon bg-success-subtle">
+
+                        <i class="bi bi-book-fill"></i>
 
                     </div>
 
-                    <div class="stat-value">
+                    <h5 class="mt-3 mb-2 fw-semibold">
 
-                        {{ course_count }}
+                        Courses
 
-                    </div>
+                    </h5>
+
+                    <p class="text-muted small mb-0">
+
+                        Manage available courses
+
+                    </p>
 
                 </div>
 
             </div>
 
-        </div>
+        </a>
 
-        <div class="col-md-4">
+    </div>
 
-            <div class="card">
+    <!-- Preferences -->
 
-                <div class="card-body">
+    <div class="col-lg-3 col-md-6">
 
-                    <div class="stat-title">
+        <a href="/api/preferences-page/" class="text-decoration-none">
 
-                        Total Allocations
+            <div class="card dashboard-card text-center h-100">
+
+                <div class="card-body py-4">
+
+                    <div class="management-icon bg-warning-subtle">
+
+                        <i class="bi bi-list-check"></i>
 
                     </div>
 
-                    <div class="stat-value">
+                    <h5 class="mt-3 mb-2 fw-semibold">
 
-                        {{ allocation_count }}
+                        Preferences
 
-                    </div>
+                    </h5>
+
+                    <p class="text-muted small mb-0">
+
+                        Student course preferences
+
+                    </p>
 
                 </div>
 
             </div>
 
-        </div>
+        </a>
 
     </div>
 
+    <!-- Reservations -->
 
-    <!-- MANAGEMENT -->
+    <div class="col-lg-3 col-md-6">
 
-    <h3 class="section-title">
+        <a href="/api/reservations-page/" class="text-decoration-none">
 
-        Management
+            <div class="card dashboard-card text-center h-100">
 
-    </h3>
+                <div class="card-body py-4">
 
-    <div class="row g-3 mb-5">
+                    <div class="management-icon bg-danger-subtle">
 
-        <div class="col-md-3">
+                        <i class="bi bi-award-fill"></i>
 
-            <a href="/api/students-page/"
-               class="btn btn-outline-primary w-100">
+                    </div>
 
-                Students
+                    <h5 class="mt-3 mb-2 fw-semibold">
 
-            </a>
+                        Reservations
 
-        </div>
+                    </h5>
 
-        <div class="col-md-3">
+                    <p class="text-muted small mb-0">
 
-            <a href="/api/courses-page/"
-               class="btn btn-outline-primary w-100">
+                        Reserved seat management
 
-                Courses
+                    </p>
 
-            </a>
+                </div>
 
-        </div>
+            </div>
 
-        <div class="col-md-3">
-
-            <a href="/api/preferences-page/"
-               class="btn btn-outline-primary w-100">
-
-                Preferences
-
-            </a>
-
-        </div>
-
-        <div class="col-md-3">
-
-            <a href="/api/reservations-page/"
-               class="btn btn-outline-primary w-100">
-
-                Reservations
-
-            </a>
-
-        </div>
+        </a>
 
     </div>
 
+</div>
 
-    <!-- COURSE STATS -->
 
-    <h3 class="section-title">
+   <!-- COURSE STATISTICS -->
 
-        Course Statistics
+<h3 class="section-title mb-4">
 
-    </h3>
+    Course Statistics
 
-    <div class="row g-4 mb-5">
+</h3>
 
-        {% for course in course_stats %}
+<div class="row g-4 mb-5">
 
-        <div class="col-lg-4 col-md-6">
+    {% for course in course_stats %}
 
-            <div class="card h-100">
+    <div class="col-xl-3 col-lg-4 col-md-6">
 
-                <div class="card-body">
+        <div class="card dashboard-card h-100">
 
-                    <h5 class="fw-semibold">
+            <div class="card-body">
+
+                <div class="d-flex justify-content-between align-items-center mb-4">
+
+                    <h5 class="fw-semibold mb-0">
 
                         {{ course.course_name }}
 
                     </h5>
 
-                    <hr>
+                    <span class="badge bg-light text-dark">
 
-                    <p>
+                        {{ course.total }} Seats
 
-                        Total Seats :
-                        <strong>{{ course.total }}</strong>
+                    </span>
 
-                    </p>
+                </div>
 
-                    <p>
+                <div class="course-stat mb-3">
 
-                        Allocated :
+                    <span class="text-muted">
 
-                        <span class="badge bg-success">
+                        Allocated
 
-                            {{ course.allocated }}
+                    </span>
 
-                        </span>
+                    <span class="badge bg-success">
 
-                    </p>
+                        {{ course.allocated }}
 
-                    <p>
+                    </span>
 
-                        Available :
+                </div>
 
-                        <span class="badge bg-primary">
+                <div class="course-stat">
 
-                            {{ course.available }}
+                    <span class="text-muted">
 
-                        </span>
+                        Available
 
-                    </p>
+                    </span>
+
+                    <span class="badge bg-primary">
+
+                        {{ course.available }}
+
+                    </span>
+
+                </div>
+
+                <div class="progress mt-4">
+
+                    <div
+                        class="progress-bar bg-success"
+                        role="progressbar"
+                        style="width:{% widthratio course.allocated course.total 100 %}%">
+
+                    </div>
 
                 </div>
 
@@ -430,119 +1026,153 @@
 
         </div>
 
-        {% endfor %}
-
     </div>
+
+    {% endfor %}
+
+</div>
 
 
     <!-- CATEGORY SUMMARY -->
 
-    <h3 class="section-title">
+<h3 class="section-title mb-4">
 
-        Category Summary
+    Category Summary
 
-    </h3>
+</h3>
 
-    <div class="card mb-5">
+<div class="card dashboard-card mb-5">
 
-        <div class="card-body">
+    <div class="card-body p-4">
 
-            <table class="table align-middle">
+        <table class="table table-borderless align-middle mb-0">
 
-                <thead>
+            <thead class="table-light">
 
-                    <tr>
+                <tr>
 
-                        <th>Category</th>
+                    <th>Category</th>
 
-                        <th>Allocated Students</th>
+                    <th class="text-end">Allocated Students</th>
 
-                    </tr>
+                </tr>
 
-                </thead>
+            </thead>
 
-                <tbody>
+            <tbody>
 
                 {% for row in category_summary %}
 
-                    <tr>
+                <tr>
 
-                        <td>{{ row.student__category }}</td>
+                    <td>
 
-                        <td>{{ row.count }}</td>
+                        <span class="fw-semibold">
 
-                    </tr>
+                            {{ row.student__category }}
+
+                        </span>
+
+                    </td>
+
+                    <td class="text-end">
+
+                        <span class="badge bg-primary rounded-pill px-3 py-2">
+
+                            {{ row.count }}
+
+                        </span>
+
+                    </td>
+
+                </tr>
 
                 {% endfor %}
 
-                </tbody>
+            </tbody>
 
-            </table>
-
-        </div>
+        </table>
 
     </div>
 
-
-    <!-- RUN ALLOCATION -->
-
-    <div class="text-center mb-5">
-
-        <button id="run-allocation"
-                class="btn btn-primary btn-lg px-5">
-
-            Run Allocation
-
-        </button>
-
-    </div>
+</div>
 
 
-    <!-- RECENT -->
 
-    <h3 class="section-title">
+<!-- RUN ALLOCATION -->
 
-        Recent Allocations
+<div class="text-center my-5">
 
-    </h3>
+    <button id="run-allocation"
+            class="btn btn-primary btn-lg px-5 py-3">
 
-    <div class="card">
+        <i class="bi bi-play-circle-fill me-2"></i>
 
-        <div class="card-body">
+        Run Allocation
 
-            <table class="table table-hover align-middle">
+    </button>
 
-                <thead>
+</div>
 
-                    <tr>
 
-                        <th>Student</th>
 
-                        <th>Allocated Course</th>
+<!-- RECENT ALLOCATIONS -->
 
-                    </tr>
+<h3 class="section-title mb-4">
 
-                </thead>
+    Recent Allocations
 
-                <tbody>
+</h3>
+
+<div class="card dashboard-card">
+
+    <div class="card-body p-4">
+
+        <table class="table table-hover align-middle mb-0">
+
+            <thead class="table-light">
+
+                <tr>
+
+                    <th>Student</th>
+
+                    <th>Allocated Course</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
 
                 {% for allocation in allocations %}
 
-                    <tr>
+                <tr>
 
-                        <td>{{ allocation.student.name }}</td>
+                    <td>
 
-                        <td>{{ allocation.course.course_name }}</td>
+                        <i class="bi bi-person-circle text-primary me-2"></i>
 
-                    </tr>
+                        {{ allocation.student.name }}
+
+                    </td>
+
+                    <td>
+
+                        <span class="badge bg-success-subtle text-success px-3 py-2">
+
+                            {{ allocation.course.course_name }}
+
+                        </span>
+
+                    </td>
+
+                </tr>
 
                 {% endfor %}
 
-                </tbody>
+            </tbody>
 
-            </table>
-
-        </div>
+        </table>
 
     </div>
 
@@ -551,19 +1181,71 @@
 
 <script>
 
-document.getElementById("run-allocation").addEventListener("click", async () => {
+const runButton = document.getElementById("run-allocation");
 
-    const response = await fetch("/api/allocate/", {
+runButton.addEventListener("click", async () => {
 
-        method: "POST"
+    runButton.disabled = true;
 
-    });
+    runButton.innerHTML = `
+        <span class="spinner-border spinner-border-sm me-2"></span>
+        Running Allocation...
+    `;
 
-    const data = await response.json();
+    try{
 
-    alert(data.message);
+        const response = await fetch("/api/allocate/",{
 
-    location.reload();
+            method:"POST"
+
+        });
+
+        const data = await response.json();
+
+        document.querySelector("#allocationToast .toast-body").innerHTML = `
+            <i class="bi bi-check-circle-fill me-2"></i>
+            ${data.message}
+        `;
+
+        const toast = new bootstrap.Toast(
+            document.getElementById("allocationToast")
+        );
+
+        toast.show();
+
+        setTimeout(() => {
+
+            location.reload();
+
+        },2000);
+
+    }
+
+    catch(error){
+
+        document.querySelector("#allocationToast").classList.remove("text-bg-success");
+
+        document.querySelector("#allocationToast").classList.add("text-bg-danger");
+
+        document.querySelector("#allocationToast .toast-body").innerHTML = `
+            <i class="bi bi-x-circle-fill me-2"></i>
+            Something went wrong.
+        `;
+
+        const toast = new bootstrap.Toast(
+            document.getElementById("allocationToast")
+        );
+
+        toast.show();
+
+        runButton.disabled = false;
+
+        runButton.innerHTML = `
+            <i class="bi bi-play-circle-fill me-2"></i>
+            Run Allocation
+        `;
+
+    }
 
 });
 
